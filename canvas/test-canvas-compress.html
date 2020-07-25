@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>canvas压缩图片</title>
+  </head>
+  <body>
+    <input type="file" id="upload" />
+    <script>
+      const ACCEPT = ["image/jpg", "image/png"];
+      const MAXSIZE = 1024 * 1024;
+      const upload = document.getElementById("upload");
+      //   转换base64格式
+      function convertImageToBase64(file, callback) {
+        let reader = new FileReader();
+        reader.addEventListener("load", function (e) {
+          console.log(e.target.result);
+          const base64Image = e.target.result;
+          callback && callback(base64Image);
+          reader = null;
+        });
+        // 读文件可以获取base64格式
+        reader.readAsDataURL(file);
+      }
+      //   callback函数
+      function compress(base64Image) {
+        let maxW = 1024;
+        let maxH = 1024;
+        const image = new Image();
+        image.addEventListener("load", function () {
+          let ratio;
+          let needCompress = false;
+          if (maxW < image.naturalWidth) {
+            needCompress = true;
+            ratio = image.naturalWidth / maxW;
+            maxH = image.naturalHeight / ratio;
+          }
+          if (maxH < image.naturalHeight) {
+            needCompress = true;
+            ratio = image.naturalHeight / maxH;
+            maxW = image.naturalWidth / ratio;
+          }
+          if (!needCompress) {
+            maxW = image.naturalWidth;
+            maxH = image.naturalHeight;
+          }
+          const canvas = document.createElement("canvas");
+          canvas.setAttribute("id", "__compress__");
+          canvas.width = maxW;
+          canvas.height = maxH;
+          canvas.style.visibility = "hidden";
+          document.body.appendChild(canvas);
+
+          const ctx = canvas.getContext("2d");
+          ctx.clearRect(0, 0, maxW, maxH);
+          ctx.drawImage(image, 0, 0, maxW, maxH);
+          const compressImage = canvas.toDataURL("image/png", 0.1); // 第二个参数是压缩比
+          const _image = new Image();
+          _image.src = compressImage;
+          document.body.append(_image);
+          canvas.remove();
+          // 后面就可以调接口去上传了
+        });
+        // 原图
+        image.src = base64Image;
+        document.body.appendChild(image);
+      }
+
+      upload.addEventListener("change", function (e) {
+        console.log(e.target.files);
+        const [file] = e.target.files;
+        if (!file) {
+          return;
+        }
+        const { type: fileType, size: fileSize } = file;
+        if (ACCEPT.indexOf(fileType) < 0) {
+          alert("不支持" + fileType);
+          return;
+        }
+        // 判断图片大小
+        if (fileSize > MAXSIZE) {
+          alert(`文件过大`);
+          upload.value = "";
+          return;
+        }
+        // 压缩文件
+        convertImageToBase64(file, compress);
+      });
+    </script>
+  </body>
+</html>

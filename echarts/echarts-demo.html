@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="echarts" style="width: 800px; height: 400px;"></div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.min.js"></script>
+    <script>
+      const chartDom = document.getElementById("echarts");
+      const chart = echarts.init(chartDom);
+
+      chart.setOption({
+        dataset: {
+          source: [
+            ["一季度", 100, 79, "分类1", 80],
+            ["二季度", 112, 81, "分类2", 20],
+            ["三季度", 96, 88, "分类3", 50],
+            ["四季度", 100, 72, "分类4", 70],
+          ],
+        },
+        title: {
+          text: "ECharts 入门示例",
+          subtext: "数据可视化",
+        },
+        tooltip: {},
+        // 图例
+        legend: {
+          data: [
+            {
+              name: "分类",
+              icon: "circle",
+              textStyle: {
+                color: "red",
+              },
+            },
+            "折线图",
+            "柱状图",
+          ],
+          left: 300,
+        },
+        // 一些按钮
+        toolbox: {
+          feature: {
+            restore: {},
+            saveAsImage: {},
+          },
+        },
+        // 下面的按钮
+        dataZoom: [
+          {
+            show: true,
+            start: 0,
+            end: 100,
+          },
+        ],
+        // 图标定位
+        grid: {},
+        xAxis: {
+          data: ["一季度", "二季度", "三季度", "四季度"],
+        },
+        yAxis: {},
+        series: [
+          {
+            name: "分类",
+            type: "pie",
+            center: ["80%", 50],
+            radius: 35,
+            encode: { itemName: 3, value: 4 },
+          },
+          {
+            name: "柱状图",
+            type: "bar",
+            encode: { x: 0, y: 1 },
+          },
+          {
+            name: "折线图",
+            type: "line",
+            encode: { x: 0, y: 2 },
+          },
+        ],
+      });
+    </script>
+  </body>
+</html>
