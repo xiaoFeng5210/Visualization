@@ -12,24 +12,45 @@
     </style>
   </head>
   <body>
-    <div>
+    <div id="select-div">
       <p>nihao</p>
       <p>nihao</p>
       <p>nihao</p>
       <p>nihao</p>
       <p>nihao</p>
     </div>
+    <div id="test"></div>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script>
       //   d3.selectAll("p").style("color", "blue");
-      d3.select("body").style("background-color", "green");
+      d3.select("select-div").style("background-color", "green");
       d3.selectAll("p").style("color", (d, i) => {
-        return i % 2 ? "red" : "white";
+        return i % 2 ? "red" : "blue";
       });
       d3.selectAll("p")
         .data([14, 8, 22, 11, 16])
         .style("font-size", (d, i) => d + "px");
-        
+
+      const p = d3
+        .select("#select-div")
+        .selectAll("p")
+        .data([14, 8, 22, 11, 16, 22])
+        .text((d) => d);
+
+      p.enter()
+        .append("p")
+        .text((d) => d);
+      p.exit().remove();
+
+      const div = d3.create("div");
+      div.html("Hello, world!");
+
+      const span = d3.create("span");
+      span.style("color", "white");
+      span.style("background-color", "black");
+      span.html("Hello, world!");
+      span.node();
+      console.log(span.node());
     </script>
   </body>
 </html>

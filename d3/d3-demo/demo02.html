@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script>
+      const data = [10, 20, 11, 18, 19, 40];
+      const div = d3
+        .create("div")
+        .style("font", "10px")
+        .style("text-align", "right")
+        .style("color", "white");
+      div
+        .selectAll("div")
+        .data(data)
+        .join("div")
+        .style("background", (d, i) => (i % 2 ? "grey" : "steelblue"))
+        .style("padding", "3px")
+        .style("margin", "1px")
+        .style("width", (d) => `${d * 10}px`)
+        .text((d) => d + "%");
+      div.node();
+      document.body.appendChild(div.node());
+    </script>
+  </body>
+</html>
