@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>webgl-demo01</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas width="300" height="200"></canvas>
+    <script>
+      const canvas = document.querySelector("canvas");
+      const gl = canvas.getContext("webgl");
+      // 创建顶点着色器和片元着色器
+      const vertex = `
+        attribute vec2 position;
+
+        void main() {
+        gl_PointSize = 1.0;
+        gl_Position = vec4(position, 1.0, 1.0);
+       }
+      `;
+
+      const fragment = `
+        precision mediump float;
+        void main()
+       {
+        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+       }    
+      `;
+      // 分别创建成shader对象
+      const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+      gl.shaderSource(vertexShader, vertex);
+      gl.compileShader(vertexShader);
+
+      const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+      gl.shaderSource(fragmentShader, fragment);
+      gl.compileShader(fragmentShader);
+
+      // 将两个shader对象关联到WebGL程序上
+      const program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+
+      gl.useProgram(program);
+
+      //定义一个类型化数组
+      const points = new Float32Array([0, -1, 0, 1, 1, -1]);
+      // 将定义好的数据写入webgl缓冲区
+      const bufferId = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
+      gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);
+      // 将缓冲区数据读取到GPU
+      // 也就是将buffer的数据绑定给顶点着色器的position变量
+      const vPosition = gl.getAttribLocation(program, "position"); // 获取顶点着色器中的position变量的地址;
+      gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0); // 给变量设置长度和类型;
+      gl.enableVertexAttribArray(vPosition); // 激活这个变量;
+
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      // 以TRIANGLES为图元进行绘制， 后面参数是顶点偏移量，顶点数量
+      gl.drawArrays(gl.TRIANGLES, 0, points.length / 2);
+    </script>
+  </body>
+</html>
