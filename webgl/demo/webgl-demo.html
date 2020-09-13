@@ -18,20 +18,26 @@
       const gl = canvas.getContext("webgl");
       // 创建顶点着色器和片元着色器
       const vertex = `
-        attribute vec2 position;
+        
+attribute vec2 position;
+varying vec3 color;
 
-        void main() {
-        gl_PointSize = 1.0;
-        gl_Position = vec4(position, 1.0, 1.0);
-       }
+void main() {
+  gl_PointSize = 1.0;
+  color = vec3(0.5 + position * 0.5, 0.0);
+  gl_Position = vec4(position * 0.5, 1.0, 1.0);
+}
       `;
 
       const fragment = `
-        precision mediump float;
-        void main()
-       {
-        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-       }    
+        
+precision mediump float;
+varying vec3 color;
+
+void main()
+{
+  gl_FragColor = vec4(color, 1.0);
+}  
       `;
       // 分别创建成shader对象
       const vertexShader = gl.createShader(gl.VERTEX_SHADER);
@@ -51,7 +57,7 @@
       gl.useProgram(program);
 
       //定义一个类型化数组
-      const points = new Float32Array([0, -1, 0, 1, 1, -1]);
+      const points = new Float32Array([-1, -1, 0, 1, 1, -1]);
       // 将定义好的数据写入webgl缓冲区
       const bufferId = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
