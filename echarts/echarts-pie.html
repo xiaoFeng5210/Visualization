@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="echarts" style="width: 800px; height: 400px"></div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.min.js"></script>
+    <script>
+      const chartDom = document.getElementById("echarts");
+      const chart = echarts.init(chartDom);
+      chart.setOption({
+        title: [
+          {
+            text: "品类分布",
+            textStyle: {
+              fontSize: 14,
+              color: "#666",
+            },
+            left: 20,
+            top: 20,
+          },
+          {
+            text: "累计订单量",
+            subtext: "320",
+            x: 120,
+            y: 120,
+          },
+        ],
+        series: [
+          {
+            type: "pie",
+            data: [12, 34, 56, 10, 23],
+            label: {
+              normal: {
+                show: true,
+                position: "outter",
+                formatter: function (param) {},
+              },
+            },
+            radius: ["45%", "60%"],
+            labelLine: {
+              normal: {
+                length: 5,
+                length: 2,
+                smooth: true,
+              },
+            },
+          },
+        ],
+      });
+    </script>
+  </body>
+</html>
