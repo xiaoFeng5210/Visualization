@@ -1,0 +1,74 @@
+// 侧边正反向柱状图
+option = {
+        xAxis: {
+          max: 100,
+          show: false
+        },
+        yAxis: [{
+          type: 'category',
+          data: ['待机', '运行', '停机', '开机', '总量'],
+          axisTick: {
+            show: false
+          },
+          axisLine:{
+            lineStyle:{
+              color:'#ccc',
+              width: 3
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#333',
+              fontSize: '16'
+            }
+          }
+        },
+        {
+          type: 'category',
+          data: ['15%', '68%', '25%', '80%', '100%'],
+          axisTick: {
+            show: false
+          },
+          axisLine:{
+            lineStyle:{
+              color:'#ccc',
+              width: 3
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#333',
+              fontSize: '16'
+            }
+          }
+        }],
+        series: [
+          {
+            type: 'bar',
+            data: [100, 80, 80, 68, 85].reverse(),
+            stack: "1",
+            itemStyle: {
+              normal: {
+                // 定制显示（按顺序）
+                color: function(params) { 
+                  var colorList = ['transparent','green','transparent','skyblue','#ccc']; 
+                  return colorList[params.dataIndex] 
+                }
+            },
+            },
+          },
+          {
+            type: 'bar',
+            data: [0, 20, 20 , 32, 15].reverse(),
+            stack: "1",
+            itemStyle: {
+              normal: {
+                color: function(params) { 
+                    var colorList = ['yellow','transparent','red','transparent','#ccc']; 
+                    return colorList[params.dataIndex] 
+                }
+              },
+            },
+          }
+        ]
+      }
